@@ -75,10 +75,8 @@ app.get('/points.json', function(req, res) {
 		lng:1,
 		count:1,
 		_id:0,
-		created:0,
-		updated:0,
 	}).exec(function(er, points) {
-		if (er !== null) {console.log("pb fetching points !");}
+		if (er !== null) {console.log("pb fetching points ! "+er);}
 		else {
 			console.log("fetched: "+points.length);
 			res.json(points);
