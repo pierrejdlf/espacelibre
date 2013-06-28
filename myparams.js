@@ -13,7 +13,8 @@ var params = {
 	mongdb:			process.env.MONGOHQ_URL || process.env.MONGOLAB_URI || 'mongodb://localhost/superpipidata',
 	
 	/////////////// twitter stream api, see https://dev.twitter.com/docs/streaming-apis/parameters
-	trackTerms:		["ton","a","il","on","se","au","y","c","moi","je","tu","sa","son","ton","ta","ne","pas","la","le","de","des","du","un","et","si","pour","rien","sur","avec","sans","ds","dans","à","ce","ces","est","eu","vu","va","oui","non","no"],
+	// not used anymore
+	//trackTerms:		["ton","a","il","on","se","au","y","c","moi","je","tu","sa","son","ton","ta","ne","pas","la","le","de","des","du","un","et","si","pour","rien","sur","avec","sans","ds","dans","à","ce","ces","est","eu","vu","va","oui","non","no"],
 	
 	///////////////	NB: using location in twitter API will match -track- OR -fallswithinlocation-
 	//locations		'48.804602,2.213745,48.920469,2.438278,48.804602,2.213745,48.920469,2.438278' Paris AND London

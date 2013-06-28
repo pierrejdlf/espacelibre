@@ -34,8 +34,8 @@ var worker = function() {
 		'statuses/filter',{
 			//'language':en,
 			//'follow':["userId","userId","userId"],
-			'track':params.trackTerms,
-			'locations':params.rectParisBig.join(',')
+			//'track':params.trackTerms,
+			'locations':"-180,-90,180,90",// ALL ! //params.rectParisBig.join(',')
 		},
 		function(stream) {
 			stream.on("data", function(tweet) {
