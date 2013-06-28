@@ -1,0 +1,75 @@
+<html>
+<head>
+	<meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+	<title>chaude map</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<style>
+		body, html {
+			margin:0;
+			padding:0;
+			font-family:Arial;
+			width:100%;
+			height:100%;
+		}
+		#main {
+			position:relative;
+			margin:0;
+			padding:0;
+			width:100%;
+			height:100%;
+		}
+		#heatmapArea {
+			position:relative;
+			margin:0;
+			padding:0;
+			width:100%;
+			height:100%;
+			float:left;
+		}
+	</style>
+	<script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"></script>
+	<script src='//ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js'></script>
+</head>
+<body>
+<div id="main">
+	<div id="heatmapArea">
+	
+	</div>
+</div>
+<script type="text/javascript" src="lib/heatmap.js"></script>
+<script type="text/javascript" src="lib/heatmap-gmaps.js"></script>
+<script type="text/javascript">
+
+	var map;
+	var heatmap; 
+	window.onload = function(){
+	
+		var myLatlng = new google.maps.LatLng(48.855228,2.346901);
+		var myOptions = {
+		  zoom: 13,
+		  center: myLatlng,
+		  mapTypeId: google.maps.MapTypeId.TERRAIN,
+		  disableDefaultUI: false,
+		  scrollwheel: true,
+		  draggable: true,
+		  navigationControl: true,
+		  mapTypeControl: false,
+		  scaleControl: true,
+		  disableDoubleClickZoom: false
+		};
+		map = new google.maps.Map(document.getElementById("heatmapArea"), myOptions);
+		
+		heatmap = new HeatmapOverlay(map, {"radius":15, "visible":true, "opacity":60});
+	    
+		// this is important, because if you set the data set too early, the latlng/pixel projection doesn't work
+		google.maps.event.addListenerOnce(map, "idle", function(){
+			$.get("/points.json",function(data) {
+				console.log("points received");
+				heatmap.setDataSet({max:3,data:data});
+			});
+		});
+	};
+
+</script>
+</body>
+</html>

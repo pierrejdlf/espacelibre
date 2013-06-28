@@ -1,0 +1,22 @@
+{
+  "name": "espace-libre",
+  "description": "air-libre",
+  "version": "0.0.7",
+  "private": true,
+  "scripts": {
+    "start": "node app.js"
+  },
+  "dependencies": {
+    "express": "3.1.1",
+    "ntwitter": "0.5.x",
+    "mongoose": "3.6.x",
+    "hogan-express": "0.3.x",
+    "oauth": "0.9.x",
+    "request":"2.21.x"
+  },
+  "subdomain": "minut-libre",
+  "engines": {
+    "node": "0.8.x",
+    "npm": "1.2.x"
+  }
+}
