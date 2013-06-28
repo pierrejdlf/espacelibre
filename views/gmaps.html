@@ -46,10 +46,10 @@
 	
 		var myLatlng = new google.maps.LatLng(48.855228,2.346901);
 		var myOptions = {
-		  zoom: 13,
+		  zoom: 11,
 		  center: myLatlng,
-		  mapTypeId: google.maps.MapTypeId.TERRAIN,
-		  disableDefaultUI: false,
+		  mapTypeId: google.maps.MapTypeId.SATELLITE,
+		  disableDefaultUI: true,
 		  scrollwheel: true,
 		  draggable: true,
 		  navigationControl: true,
@@ -59,13 +59,24 @@
 		};
 		map = new google.maps.Map(document.getElementById("heatmapArea"), myOptions);
 		
-		heatmap = new HeatmapOverlay(map, {"radius":15, "visible":true, "opacity":60});
+		heatmap = new HeatmapOverlay(map, {
+			"radius":15,
+			"visible":true,
+			"opacity":80,
+			"gradient":{
+				0.35: 	"#151B02",
+				0.45: 	"#313E04",
+				0.65: 	"#918E14",
+				0.85: 	"#FFD601",
+				1.0:	"#FFF200",
+			},
+		});
 	    
 		// this is important, because if you set the data set too early, the latlng/pixel projection doesn't work
 		google.maps.event.addListenerOnce(map, "idle", function(){
 			$.get("/points.json",function(data) {
 				console.log("points received");
-				heatmap.setDataSet({max:3,data:data});
+				heatmap.setDataSet({max:2,data:data});
 			});
 		});
 	};

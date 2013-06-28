@@ -43,7 +43,7 @@ var worker = function() {
 				if(keepIt) {
 					var coord = tweet.geo.coordinates;
 									
-					console.log("\n===== TWEET RECEIVED "+(tweetSessionCount++)+" @"+tweet.user.screen_name+" : "+coord[0]+","+coord[1]);
+					console.log("===== TWEET RECEIVED "+(tweetSessionCount++)+" @"+tweet.user.screen_name+" : "+coord[0]+","+coord[1]);
 					
 					models.Point.findOneAndUpdate({lat:coord[0],lng:coord[1]},{}, function(err,found) {
 						if (err) { console.log("error findoneandupdate"); }

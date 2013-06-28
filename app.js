@@ -88,7 +88,7 @@ app.get('/points.json', function(req, res) {
 // avoid sleeping ?
 var sleepCount = 0;
 setInterval(function(){
-	console.log("je ne dors pas "+(sleepCount++));
+	console.log("je ne dors pas ! "+(sleepCount++));
 },200000);
 
 
