@@ -12,6 +12,8 @@ var params = {
 	/////////////// DB
 	mongdb:			process.env.MONGOHQ_URL || process.env.MONGOLAB_URI || 'mongodb://localhost/superpipidata',
 	
+	pass:			process.env.ELPASS ,
+	
 	/////////////// twitter stream api, see https://dev.twitter.com/docs/streaming-apis/parameters
 	// not used anymore
 	//trackTerms:		["ton","a","il","on","se","au","y","c","moi","je","tu","sa","son","ton","ta","ne","pas","la","le","de","des","du","un","et","si","pour","rien","sur","avec","sans","ds","dans","à","ce","ces","est","eu","vu","va","oui","non","no"],

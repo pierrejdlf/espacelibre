@@ -41,17 +41,18 @@ var worker = function() {
 			stream.on("data", function(tweet) {
 				var keepIt = tweet.geo!=null && utils.isPointInPoly(params.parisPolygon,tweet.geo.coordinates);
 				if(keepIt) {
-					var coord = tweet.geo.coordinates;
+					var lat = tweet.geo.coordinates[0].toFixed(3);
+					var lng = tweet.geo.coordinates[1].toFixed(3);
 									
-					console.log("===== TWEET RECEIVED "+(tweetSessionCount++)+" @"+tweet.user.screen_name+" : "+coord[0]+","+coord[1]);
+					console.log("===== TWEET RECEIVED "+(tweetSessionCount++)+" @"+tweet.user.screen_name+" : "+lat+","+lng);
 					
-					models.Point.findOneAndUpdate({lat:coord[0],lng:coord[1]},{}, function(err,found) {
+					models.Point.findOneAndUpdate({lat:lat,lng:lng},{}, function(err,found) {
 						if (err) { console.log("error findoneandupdate"); }
 						else {
 							if(!found) {
 								var newPoint = new models.Point({
-									lat: 		coord[0],
-									lng: 		coord[1],
+									lat: 		lat,
+									lng: 		lng,
 									count: 		1,
 									created: 	Date(),
 									updated:	Date(),

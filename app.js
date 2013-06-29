@@ -68,6 +68,22 @@ app.get('/', function(req, res) {
 });
 
 /////////////////////////////////////////////////////////////////////
+// clear all points
+app.get('/clear', function(req, res) {
+	var pass = req.param('pass');
+	if(pass==params.pass) {
+		models.Point.find().exec(function(er, points) {
+			points.map(function(p){
+				p.remove();
+			});
+			res.json({status:'done'});
+		});
+	} else {
+		res.json({status:'forbidden'});
+	}
+});
+
+/////////////////////////////////////////////////////////////////////
 app.get('/points.json', function(req, res) {
 	//var limit = req.param('limit') || 0;
 	models.Point.find({},{
