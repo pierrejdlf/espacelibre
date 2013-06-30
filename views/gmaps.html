@@ -46,7 +46,9 @@
 	
 		var myLatlng = new google.maps.LatLng(48.855228,2.346901);
 		var myOptions = {
-		  zoom: 11,
+		  zoom: 12,
+		  minZoom:10,
+		  maxZoom:14,
 		  center: myLatlng,
 		  mapTypeId: google.maps.MapTypeId.SATELLITE,
 		  disableDefaultUI: true,
@@ -60,15 +62,17 @@
 		map = new google.maps.Map(document.getElementById("heatmapArea"), myOptions);
 		
 		heatmap = new HeatmapOverlay(map, {
-			"radius":15,
+			"radius":30, // think of grid step lat/lng ~43.876 .toFixed(3) !
 			"visible":true,
 			"opacity":80,
 			"gradient":{
 				0.35: 	"#151B02",
 				0.45: 	"#313E04",
 				0.65: 	"#918E14",
-				0.85: 	"#FFD601",
-				1.0:	"#FFF200",
+				0.75: 	"#FFD601",
+				0.85:	"#FFF200",
+				0.95:	"#FFB57F",
+				1.00:	"#FF9409",
 			},
 		});
 	    
@@ -76,7 +80,7 @@
 		google.maps.event.addListenerOnce(map, "idle", function(){
 			$.get("/points.json",function(data) {
 				console.log("points received");
-				heatmap.setDataSet({max:2,data:data});
+				heatmap.setDataSet({max:{{maxcount}},data:data});
 			});
 		});
 	};

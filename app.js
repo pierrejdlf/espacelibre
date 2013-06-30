@@ -64,7 +64,17 @@ http.createServer(app).listen(app.get('port'), function(){
 /////////////////////////////////////////////////////////////////////
 // home page rendered in index.html
 app.get('/', function(req, res) {
-	return res.render('gmaps');
+	models.Point.findOne().sort({count:-1}).exec(function(err, doc) {
+		if (err !== null) {console.log("pb fetching max points: "+err);}
+		else {
+			console.log("max count: "+doc.count);
+			res.locals = {
+				maxcount: doc.count,
+			};
+			return res.render('gmaps');
+		}
+	});
+	
 });
 
 /////////////////////////////////////////////////////////////////////
