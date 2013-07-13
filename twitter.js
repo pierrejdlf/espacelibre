@@ -19,6 +19,24 @@ var twitterer = new OAuth(
 	"HMAC-SHA1"
 );
 
+/////////////////////////////////////////////////////////////////////
+// get words from tweet
+var getWords = function(text) {
+	var res = [];
+	var t = text.toLowerCase();
+	t = t.replace(/[a-z]*([a-z])\1{2,}[a-z]*/g," "); 			// repeating 3 chars like "mooort"
+	t = t.replace(/[a-z]*([aehijoquvwxyz])\1{1,}[a-z]*/g," ");	// repeating 2x aehijoquvwxyz
+	t = t.replace(/@[^ ]+/g,"");								// mentions
+	t = t.replace(/#[^ ]+/g,"");								// hashtags
+	t = t.replace(/http:[a-z0-9\.\/]+/g,"");					// links
+	var l = t.split(/[^(a-z‰ˆŽ”™ž)]+/g);
+	l.forEach(function(m){
+		var ok = (m.length>2);
+		if(ok) res.push(m);
+	});
+	
+	return res;
+};
 
 /////////////////////////////////////////////////////////////////////
 // twitter listener
@@ -41,26 +59,44 @@ var worker = function() {
 			stream.on("data", function(tweet) {
 				var keepIt = tweet.geo!=null && utils.isPointInPoly(params.parisPolygon,tweet.geo.coordinates);
 				if(keepIt) {
+				
 					var lat = tweet.geo.coordinates[0].toFixed(3);
 					var lng = tweet.geo.coordinates[1].toFixed(3);
 									
 					console.log("===== TWEET RECEIVED "+(tweetSessionCount++)+" @"+tweet.user.screen_name+" : "+lat+","+lng);
+				
+					var ws = getWords(tweet.text);
+					var hs = tweet.entities.hashtags.map(function(h){
+						return h.text.toLowerCase();
+					});
+					var us = tweet.entities.user_mentions.map(function(u){
+						return u.screen_name.toLowerCase();
+					});
+					var point = {
+						loc: 		[lat,lng],
+						count: 		1,
+						created: 	Date(),
+						updated:	Date(),
+						text:		tweet.text,
+						hashtags:	hs,
+						mentions:	us,
+						words:		ws,
+					}
+					
+					//console.log(JSON.stringify(point,null,4));
 					
 					models.Point.findOneAndUpdate({lat:lat,lng:lng},{}, function(err,found) {
 						if (err) { console.log("error findoneandupdate"); }
 						else {
 							if(!found) {
-								var newPoint = new models.Point({
-									lat: 		lat,
-									lng: 		lng,
-									count: 		1,
-									created: 	Date(),
-									updated:	Date(),
-								});
+								var newPoint = new models.Point(point);
 								newPoint.save();
 							} else {
 								found.count  	= found.count+1;
 								found.updated 	= Date();
+								found.hashtags	= point.hashtags.concat(found.hashtags);
+								found.mentions	= point.mentions.concat(found.mentions);
+								found.words		= point.words.concat(found.words);
 								found.save();
 							}
 						}

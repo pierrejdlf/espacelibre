@@ -80,6 +80,7 @@
 		google.maps.event.addListenerOnce(map, "idle", function(){
 			$.get("/points.json",function(data) {
 				console.log("points received");
+				// data needs to have {lat,lng}
 				heatmap.setDataSet({max:{{maxcount}},data:data});
 			});
 		});

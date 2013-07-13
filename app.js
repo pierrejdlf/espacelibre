@@ -100,6 +100,8 @@ app.get('/points.json', function(req, res) {
 		lat:1,
 		lng:1,
 		count:1,
+		hashtags:1,
+		words:1,
 		_id:0,
 	}).exec(function(er, points) {
 		if (er !== null) {console.log("pb fetching points ! "+er);}
