@@ -98,6 +98,20 @@ app.get('/points.json', function(req, res) {
 	//var limit = req.param('limit') || 0;
 	models.Point.find({},{
 		loc:1,
+	}).exec(function(er, points) {
+		if (er !== null) {console.log("pb fetching points ! "+er);}
+		else {
+			console.log("fetched: "+points.length);
+			res.json(points);
+		}
+	});
+});
+
+/////////////////////////////////////////////////////////////////////
+app.get('/all.json', function(req, res) {
+	//var limit = req.param('limit') || 0;
+	models.Point.find({},{
+		loc:1,
 		count:1,
 		hashtags:1,
 		mentions:1,
