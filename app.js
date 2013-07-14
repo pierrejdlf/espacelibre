@@ -100,6 +100,7 @@ app.get('/points.json', function(req, res) {
 		loc:1,
 		count:1,
 		hashtags:1,
+		mentions:1,
 		words:1,
 		_id:0,
 	}).exec(function(er, points) {
