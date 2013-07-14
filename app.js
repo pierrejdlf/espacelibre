@@ -97,8 +97,7 @@ app.get('/clear', function(req, res) {
 app.get('/points.json', function(req, res) {
 	//var limit = req.param('limit') || 0;
 	models.Point.find({},{
-		lat:1,
-		lng:1,
+		loc:1,
 		count:1,
 		hashtags:1,
 		words:1,
