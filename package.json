@@ -13,7 +13,8 @@
     "hogan-express": "0.3.x",
     "oauth": "0.9.x",
     "moment":"2.x.x",
-    "request":"2.21.x"
+    "request":"2.21.x",
+    "natural":0.1.21"
   },
   "subdomain": "minut-libre",
   "engines": {

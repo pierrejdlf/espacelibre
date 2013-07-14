@@ -5,12 +5,12 @@ var pointSchema = new mongoose.Schema({
 	count:		Number,
 	created:	Date,
 	updated:	Date,
-	hashtags:	[],
-	words:		[],
-	mentions:	[],
-	users:		[],
-	dates:		[],
-	followers:	[],
+	hashtags:	[String],
+	words:		[String],
+	mentions:	[String],
+	users:		[String],
+	dates:		[Date],
+	followers:	[String],
 });
 
 pointSchema.index({loc:'2d'});

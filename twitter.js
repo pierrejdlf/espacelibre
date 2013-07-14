@@ -1,7 +1,9 @@
 var models = require("./models.js"),
 	OAuth = require('oauth').OAuth,
 	params = require("./myparams.js"),
-	utils = require("./utils.js");
+	utils = require("./utils.js"),
+	natural = require('natural'),
+	tokenizer = new natural.WordTokenizer();
 
 /////////////////////////////////////////////////////////////////////
 
@@ -29,7 +31,8 @@ var getWords = function(text) {
 	t = t.replace(/@[^ ]+/g,"");								// mentions
 	t = t.replace(/#[^ ]+/g,"");								// hashtags
 	t = t.replace(/http:[a-z0-9\.\/]+/g,"");					// links
-	var l = t.split(/[^(a-z‰ˆŽ”™ž)]+/g);
+	//var l = t.split(/[^(a-z‰ˆŽ”™ž)]+/g);
+	l = tokenizer.tokenize(t);
 	l.forEach(function(m){
 		var ok = (m.length>2);
 		if(ok) res.push(m);
