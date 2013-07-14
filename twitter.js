@@ -81,6 +81,9 @@ var worker = function() {
 						hashtags:	hs,
 						mentions:	us,
 						words:		ws,
+						users:		[tweet.user.screen_name],
+						dates:		[Date()],
+						followers:	tweet.user.followers_count;
 					}
 					
 					//console.log(JSON.stringify(point,null,4));
@@ -97,6 +100,9 @@ var worker = function() {
 								found.hashtags	= point.hashtags.concat(found.hashtags);
 								found.mentions	= point.mentions.concat(found.mentions);
 								found.words		= point.words.concat(found.words);
+								found.users		= point.users.concat(found.users);
+								found.dates		= point.dates.concat(found.dates);
+								found.followers	= point.followers.concat(found.followers);
 								found.save();
 							}
 						}

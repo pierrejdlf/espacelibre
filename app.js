@@ -102,6 +102,9 @@ app.get('/points.json', function(req, res) {
 		hashtags:1,
 		mentions:1,
 		words:1,
+		users:1,
+		dates:1,
+		followers:1,
 		_id:0,
 	}).exec(function(er, points) {
 		if (er !== null) {console.log("pb fetching points ! "+er);}

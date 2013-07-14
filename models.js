@@ -8,6 +8,9 @@ var pointSchema = new mongoose.Schema({
 	hashtags:	[],
 	words:		[],
 	mentions:	[],
+	users:		[],
+	dates:		[],
+	followers:	[],
 });
 
 pointSchema.index({loc:'2d'});
