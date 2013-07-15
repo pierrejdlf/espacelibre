@@ -86,7 +86,7 @@ var worker = function() {
 						words:		ws,
 						users:		[tweet.user.screen_name],
 						dates:		[Date()],
-						followers:	tweet.user.followers_count,
+						followers:	[tweet.user.followers_count],
 					}
 					
 					//console.log(JSON.stringify(point,null,4));
