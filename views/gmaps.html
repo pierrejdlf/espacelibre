@@ -46,8 +46,8 @@
 	
 		var myLatlng = new google.maps.LatLng(48.855228,2.346901);
 		var myOptions = {
-		  zoom: 12,
-		  minZoom:10,
+		  zoom: 9,
+		  minZoom:9,
 		  maxZoom:14,
 		  center: myLatlng,
 		  mapTypeId: google.maps.MapTypeId.SATELLITE,
@@ -74,7 +74,7 @@
 				0.75: 	"#FFD601",
 				0.85:	"#FFF200",
 				0.95:	"#FFB57F",
-				1.00:	"#FF9409",
+				1.00:	"red",
 			},
 		});
 	    
@@ -84,7 +84,7 @@
 				console.log("points received");
 				// data needs to have {lat,lng}
 				data = data.map(function(d){return {lat:d.loc[0],lng:d.loc[1]};});
-				heatmap.setDataSet({max:{{maxcount}}*0.4,data:data});
+				heatmap.setDataSet({max:{{maxcount}}*1,data:data});
 			});
 		});
 	};
