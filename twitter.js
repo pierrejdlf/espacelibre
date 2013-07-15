@@ -91,7 +91,7 @@ var worker = function() {
 					
 					//console.log(JSON.stringify(point,null,4));
 					
-					models.Point.findOneAndUpdate({lat:lat,lng:lng},{}, function(err,found) {
+					models.Point.findOneAndUpdate({loc:point.loc},{}, function(err,found) {
 						if (err) { console.log("error findoneandupdate"); }
 						else {
 							if(!found) {
