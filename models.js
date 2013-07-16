@@ -7,6 +7,7 @@ var pointSchema = new mongoose.Schema({
 	updated:	Date,
 	hashtags:	[String],
 	words:		[String],
+	puncs:		[String],
 	mentions:	[String],
 	users:		[String],
 	dates:		[Date],

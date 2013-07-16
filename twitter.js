@@ -3,6 +3,7 @@ var models = require("./models.js"),
 	params = require("./myparams.js"),
 	utils = require("./utils.js"),
 	natural = require('natural'),
+	ent = require('ent'),
 	tokenizer = new natural.WordTokenizer();
 
 /////////////////////////////////////////////////////////////////////
@@ -11,6 +12,7 @@ var tweetSessionCount = 1;
 
 /////////////////////////////////////////////////////////////////////
 // the simple independent tweet robot sender, declared once
+/*
 var twitterer = new OAuth(
 	"https://api.twitter.com/oauth/request_token",
 	"https://api.twitter.com/oauth/access_token",
@@ -20,6 +22,29 @@ var twitterer = new OAuth(
 	null,
 	"HMAC-SHA1"
 );
+*/
+
+var removeHashMentionsHttp = function(t){
+	t = ent.decode(t);
+	t = t.replace(/@[^ ]+/g,"");								// mentions
+	t = t.replace(/#[^ ]+/g,"");								// hashtags
+	t = t.replace(/http:[a-z0-9\.\/]+/g,"");					// links
+	return t;
+};
+/////////////////////////////////////////////////////////////////////
+// get words from tweet
+var getPuncs = function(text) {
+	var res = [];
+	var t = text.toLowerCase();
+	t = removeHashMentionsHttp(t);
+	var l = t.split(/[(a-z)çàéèêîôóùû ]+/g);
+	l.forEach(function(m){
+		var ok = (m.length>0);
+		if(ok) res.push(m);
+	});
+	
+	return res;
+};
 
 /////////////////////////////////////////////////////////////////////
 // get words from tweet
@@ -28,11 +53,10 @@ var getWords = function(text) {
 	var t = text.toLowerCase();
 	t = t.replace(/[a-z]*([a-z])\1{2,}[a-z]*/g," "); 			// repeating 3 chars like "mooort"
 	t = t.replace(/[a-z]*([aehijoquvwxyz])\1{1,}[a-z]*/g," ");	// repeating 2x aehijoquvwxyz
-	t = t.replace(/@[^ ]+/g,"");								// mentions
-	t = t.replace(/#[^ ]+/g,"");								// hashtags
-	t = t.replace(/http:[a-z0-9\.\/]+/g,"");					// links
-	//var l = t.split(/[^(a-z���������)]+/g);
-	l = tokenizer.tokenize(t);
+	t = removeHashMentionsHttp(t);
+	//var l = t.split(/[^(a-z)]+/g);
+	var l = t.split(/[^(a-z)çàéèêîôóùû]+/g);
+	//l = tokenizer.tokenize(t);
 	l.forEach(function(m){
 		var ok = (m.length>2);
 		if(ok) res.push(m);
@@ -68,7 +92,6 @@ var worker = function() {
 									
 					console.log("===== TWEET RECEIVED "+(tweetSessionCount++)+" @"+tweet.user.screen_name+" : "+lat+","+lng);
 				
-					var ws = getWords(tweet.text);
 					var hs = tweet.entities.hashtags.map(function(h){
 						return h.text.toLowerCase();
 					});
@@ -76,15 +99,17 @@ var worker = function() {
 						return u.screen_name.toLowerCase();
 					});
 					var point = {
+						text:		tweet.text,
+						
 						loc: 		[lat,lng],
 						count: 		1,
 						created: 	Date(),
 						updated:	Date(),
-						text:		tweet.text,
 						hashtags:	hs,
 						mentions:	us,
-						words:		ws,
-						users:		[tweet.user.screen_name],
+						words:		getWords(tweet.text),
+						puncs:		getPuncs(tweet.text),
+						users:		[tweet.user.screen_name.toLowerCase()],
 						dates:		[Date()],
 						followers:	[tweet.user.followers_count],
 					}
@@ -103,6 +128,7 @@ var worker = function() {
 								found.hashtags	= point.hashtags.concat(found.hashtags);
 								found.mentions	= point.mentions.concat(found.mentions);
 								found.words		= point.words.concat(found.words);
+								found.puncs		= point.words.concat(found.puncs);
 								found.users		= point.users.concat(found.users);
 								found.dates		= point.dates.concat(found.dates);
 								found.followers	= point.followers.concat(found.followers);
