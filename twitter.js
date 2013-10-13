@@ -65,6 +65,16 @@ var getWords = function(text) {
 	return res;
 };
 
+var playwithtweet = function(tweet) {
+	var t = tweet.text;
+	var toks = tokenizer.tokenize(t);
+	console.log("PLAYED: "+t);
+	console.log(toks);
+	//natural.JaroWinklerDistance(,);
+	//natural.LevenshteinDistance(,);
+	//natural.DiceCoefficient(,);
+}
+
 /////////////////////////////////////////////////////////////////////
 // twitter listener
 var worker = function() {
@@ -100,7 +110,6 @@ var worker = function() {
 					});
 					var point = {
 						text:		tweet.text,
-						
 						loc: 		[lat,lng],
 						count: 		1,
 						created: 	Date(),
@@ -112,8 +121,10 @@ var worker = function() {
 						users:		[tweet.user.screen_name.toLowerCase()],
 						dates:		[Date()],
 						followers:	[tweet.user.followers_count],
+						//todo: store the {word:count} wix object here ! avoid computing all despues
 					}
 					
+					//playwithtweet(tweet);
 					//console.log(JSON.stringify(point,null,4));
 					
 					models.Point.findOneAndUpdate({loc:point.loc},{}, function(err,found) {
@@ -143,6 +154,7 @@ var worker = function() {
 			});
 			stream.on('end', function (response) { // Handle a disconnection
 				console.log("============ TWITTER STREAM DISCONNECTED");
+				console.log(response);
 			});
 		}
 	);

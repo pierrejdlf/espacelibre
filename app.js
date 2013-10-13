@@ -1,6 +1,5 @@
 /////////////////////////////////////////////////////////////////////
 var params = require("./myparams.js");
-console.log("\n==== HOLY-MIC");
 
 /////////////////////////////////////////////////////////////////////
 // We need to 'require' the following modules
@@ -35,10 +34,11 @@ app.configure(function () {
 	app.use('/img',express.static(path.join(__dirname, 'img')));
 	app.use('/lib',express.static(path.join(__dirname, 'lib')));
 	
-	// templating engine: hogan
-	app.engine('html', require('hogan-express'));
 	app.enable('view cache');
-	app.set('view engine', 'html');
+
+	// setup jade templating
+	app.set('view engine', 'jade');
+    app.set('views', __dirname + '/views');
 });
 
 /////////////////////////////////////////////////////////////////////

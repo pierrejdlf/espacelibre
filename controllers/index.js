@@ -1,6 +1,7 @@
 var params = require("../myparams.js"),
 	models = require("../models.js"),
-	express = require("express");
+	express = require("express"),
+	_ = require('underscore');
 	
 var app = module.exports = express();
 
@@ -18,6 +19,85 @@ app.get('/', function(req, res) {
 		}
 	});
 	
+});
+
+
+/////////////////////////////////////////////////////////////////////
+//
+// TODO: compute worddistance between each words ... to regroup ? to lemm ?
+//
+/////////////////////////////////////////////////////////////////////
+
+
+/////////////////////////////////////////////////////////////////////
+// compute for each point the {'word':count} list
+app.get('/compute', function(req, res) {
+	var pass = req.param('pass');
+	if(pass==params.pass) {
+		models.Point.find().exec(function(er, points) {
+			points.forEach(function(p){
+				// transform [oui,non,oui] to {oui:2,non:1}
+				var clasm = _.reduce(p.words,function(init,d){
+					init[d] = (init[d] || 0) +1;
+					return init;
+				},{});
+				p.wix = clasm;
+				p.save();
+			});
+			res.json({status:'computed'});
+		});
+	} else {
+		//res.json({status:'done'});
+		res.json({status:'forbidden'});
+	}
+});
+
+/////////////////////////////////////////////////////////////////////
+// display map and list of words based on bounds
+app.get('/list', function(req, res) {
+	res.render('list');
+});
+app.get('/list.json', function(req, res) {
+	var zone = req.param('zone').split(',');
+	// var query = {
+	//	// not working !	
+	// 	loc:	{ "$lt":[zone[0],zone[2]],"$gt":[zone[1],zone[3]] },
+	// }
+	// console.log(JSON.stringify(query,null,4));
+
+	models.Point
+		.find({},{
+			wix: 1,
+		})
+		.where( 'loc.0' ).gt( zone[0] ).lt( zone[2] )
+		.where( 'loc.1' ).gt( zone[1] ).lt( zone[3] )
+		.exec(function(er, points) {
+			if(er) console.log(er);
+			console.log("points in that zone: "+points.length);
+			var words  = {};
+			// in words we put all the cumulated {word:12,mot:2,pouet:1}
+			var max = 0;
+			points.forEach(function(d) {
+				for(k in d.wix) {
+					var n = (words[k] || 0) + 1;
+					words[k] = n;
+					max = Math.max(n,max);
+				}
+			});
+			// remove all words with only 1 occurence
+			toomit = [];
+			for(w in words) {
+				if(words[w]==1) toomit.push(w);
+			}
+			_.omit(words,toomit);
+				// clasm.forEach(function(w){
+				// 	//natural.JaroWinklerDistance(,);
+				// 	//natural.LevenshteinDistance(,);
+				// 	//natural.DiceCoefficient(,);
+				// });
+			//var out = {data:points[0].wix};
+			res.json({words:words,max:max});
+		});
 });
 
 /////////////////////////////////////////////////////////////////////

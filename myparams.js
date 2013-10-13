@@ -10,7 +10,7 @@ var params = {
 	port:			process.env.PORT ,
 	
 	/////////////// DB
-	mongdb:			process.env.MONGOHQ_URL || process.env.MONGOLAB_URI || 'mongodb://localhost/superpipidata2',
+	mongdb:			process.env.MONGOHQ_URL || process.env.MONGOLAB_URI || 'mongodb://localhost/espacelouve',
 	
 	pass:			process.env.ELPASS ,
 	

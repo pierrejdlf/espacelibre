@@ -10,9 +10,10 @@
     "express": "3.1.1",
     "ntwitter": "0.5.x",
     "mongoose": "3.6.x",
-    "hogan-express": "0.3.x",
+    "jade": "0.31.2",
     "oauth": "0.9.x",
     "moment":"2.x.x",
+    "underscore":"1.5.x",
     "request":"2.21.x",
     "natural":"0.1.x",
     "ent":"0.0.5"

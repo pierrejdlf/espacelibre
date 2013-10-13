@@ -12,6 +12,8 @@ var pointSchema = new mongoose.Schema({
 	users:		[String],
 	dates:		[Date],
 	followers:	[String],
+
+	wix:	 	{},
 });
 
 pointSchema.index({loc:'2d'});
