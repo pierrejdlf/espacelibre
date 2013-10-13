@@ -84,10 +84,10 @@ app.get('/list.json', function(req, res) {
 					max = Math.max(n,max);
 				}
 			});
-			// remove all words with only 1 occurence
+			// remove all words with only occurence <3
 			toomit = [];
 			for(w in words) {
-				if(words[w]==1) toomit.push(w);
+				if(words[w]<3) toomit.push(w);
 			}
 			_.omit(words,toomit);
 				// clasm.forEach(function(w){
@@ -96,7 +96,7 @@ app.get('/list.json', function(req, res) {
 				// 	//natural.DiceCoefficient(,);
 				// });
 			//var out = {data:points[0].wix};
-			res.json({words:words,max:max});
+			res.json({words:words,max:max,n:points.length});
 		});
 });
 
